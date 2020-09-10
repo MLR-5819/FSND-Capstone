@@ -8,6 +8,10 @@ def create_app(test_config=None):
   app = Flask(__name__)
   CORS(app)
 
+  @app.route('/')
+  def NAME():
+    function here
+
   return app
 
 APP = create_app()
