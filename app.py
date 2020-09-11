@@ -1,6 +1,7 @@
 import os
 import random
-from flask import Flask, request, abort, jsonify
+import json
+from flask import Flask, render_template, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Entry, Category
@@ -10,10 +11,23 @@ def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   CORS(app)
+  setup_db(app)
 
   @app.route('/')
   def index():
-    #function here
+    return render_template('pages/index.html')
+
+  #TODO GET request
+
+  #TODO GET request
+
+  #TODO POST request
+
+  #TODO PATCH request
+
+  #TODO DELETE request
+
+  #TODO 4 @app.errorhandler
 
   return app
 
