@@ -30,7 +30,7 @@ class Entry(db.Model):
     category = Column(String)
     entry_url = Column(String)
     votes = Column(Integer)
-    date = 
+    date = Column(Date)
 
     def __init__(self, name, category, entry_url, votes, date):
         self.name = name
