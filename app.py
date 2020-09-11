@@ -1,7 +1,10 @@
 import os
+import random
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from models import setup_db, Entry, Category
+from auth import AuthError
 
 def create_app(test_config=None):
   # create and configure the app
@@ -10,7 +13,7 @@ def create_app(test_config=None):
 
   @app.route('/')
   def index():
-    function here
+    #function here
 
   return app
 
