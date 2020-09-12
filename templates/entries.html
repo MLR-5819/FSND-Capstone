@@ -1,6 +1,7 @@
-{ extends "main.html" %}
+{% extends "main.html" %}
+{% block title %}{{ #variable }} | This Or That!{% endblock %}
 {% block content %}
-    <div class="entries">
+    <div class="content">
         <h1>Entries</h1>
         <p>search bar? return all entries. clicking on one loads stats?</p>
     </div>
