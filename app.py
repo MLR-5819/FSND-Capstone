@@ -15,9 +15,13 @@ def create_app(test_config=None):
 
   @app.route('/')
   def index():
-    return render_template('pages/index.html')
+    return render_template('index.html')
 
   #TODO GET request
+  @app.route('/categories', methods=['GET'])
+  def get_categories():
+    categories = Category.query.order_by(Category.id).all()
+
 
   #TODO GET request
 
