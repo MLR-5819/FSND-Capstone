@@ -25,12 +25,12 @@ def setup_db(app, database_path = database_path):
 class Entry(db.Model):
     __tablename__ = 'entry'
 
-    id = Column(Integer, primary_key=True) 
-    name = Column(String)
-    category = Column(String)
-    entry_url = Column(String)
-    votes = Column(Integer)
-    date = Column(Date)
+    id = Column(db.Integer, primary_key=True) 
+    name = Column(db.String)
+    category = Column(db.String)
+    entry_url = Column(db.String)
+    votes = Column(db.Integer)
+    date = Column(db.Date)
 
     def __init__(self, name, category, entry_url, votes, date):
         self.name = name
@@ -63,8 +63,8 @@ class Entry(db.Model):
 class Category(db.Model):
     __tablename__ = 'category'
 
-    id = Column(Integer, primary_key=True)
-    type = Column(String)
+    id = Column(db.Integer, primary_key=True)
+    type = Column(db.String)
 
     def __init__(self, type):
         self.type = type
