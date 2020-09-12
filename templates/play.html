@@ -1,6 +1,7 @@
-{ extends "main.html" %}
+{% extends "main.html" %}
+{% block title %}{{ #variable }} | This Or That!{% endblock %}
 {% block content %}
-    <div class="play">
+    <div class="content">
         <h1>This Or That?</h1>
         <p>this or that voting page,
             grab 2 random entries
