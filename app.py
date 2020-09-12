@@ -21,15 +21,27 @@ def create_app(test_config=None):
   @app.route('/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by(Category.id).all()
-    data = []
+    entries = Entry.query.all()
+    
+    cat_data = []
+    ent_data = []
 
     for category in categories:
-      data.append({
+      cat_data.append({
         "id": category.id,
         "type": category.type
       })
 
-    return render_template('categories.html', categories=data)
+    for entry in entries:
+      ent_data.append({
+        "id": entry.id,
+        "name": entry.name,
+        "category": entry.category,
+        "image": entry.entry_url,
+        "votes": entry.votes
+      })
+
+    return render_template('categories.html', categories=cat_data, entries=ent_data)
 
 
   #TODO GET request
