@@ -1,1 +1,15 @@
-show category buttons at top and display all entries or selected category
+{% extends "main.html" %}
+{% block title %}Categories | This Or That!{% endblock %}
+{% block content %}
+    <div class="content">
+        <h1>Categories</h1>
+        <div class="categories">
+            <form action="/show_category.html" method="GET">
+                {{% for category in categories %}}
+                <button type="submit" value="{{ category.id }}">{{ category.type }}</button>
+                {{% endfor %}}
+            </form>
+        </div>
+        <p>show category buttons at top and display all entries</p>
+    </div>
+{% endblock %}
