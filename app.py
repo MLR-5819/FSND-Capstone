@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Entry, Category
-from auth import AuthError
+#from auth import AuthError
 
 def create_app(test_config=None):
   # create and configure the app
@@ -22,6 +22,12 @@ def create_app(test_config=None):
   def get_categories():
     categories = Category.query.order_by(Category.id).all()
     data = []
+
+    for category in categories:
+      data.append({
+        "id": category.id,
+        "type": category.type
+      })
 
     return render_template('categories.html', categories=data)
 
