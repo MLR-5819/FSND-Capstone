@@ -6,14 +6,17 @@
     </head>
     <body>
         <header>
-            <div class="container">
-                <img src='static/img/thisorthat.png' width="250" height="75">
+            <div class="sidenav">
+                <a href="{{ url_for('index') }}"><img class="logo" src='static/img/thisorthat.png'></a>
                 <nav>
-                    <ul class="menu">
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
-                        <li><a href="{{ url_for('get_categories') }}">Categories</a></li>
-                        <li><a href="">Entries</a></li>
-                        <li><a href="">Play</a></li>
+                    <ul>
+                        <hr>
+                        <li><a href="{{ url_for('get_categories') }}">CATEGORIES</a></li>
+                        <li><a href="">ENTRIES</a></li>
+                        <li><a href="">PLAY</a></li>
+                        <br><hr>
+                        <li><a href="">Sign up</a></li>
+                        <li><a href="">Log in</a></li>
                     </ul>
                 </nav>
             </div>
