@@ -46,7 +46,6 @@ def create_app(test_config=None):
   def show_category():
     categories = Category.query.order_by(Category.id).all()
     entries = Entry.query.filter(Entry.category==id.all()
-    showcat = Category.query.filter(Category.id==id).one()
     
     cat_data = []
     ent_data = []
