@@ -5,7 +5,8 @@ from flask import Flask, render_template, url_for, Response, request, abort, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Entry, Category
-#from auth import AuthError
+# from auth import AuthError
+
 
 def create_app(test_config=None):
   # create and configure the app
@@ -17,12 +18,12 @@ def create_app(test_config=None):
   def index():
     return render_template('home.html')
 
-  #TODO GET request
+  # TODO GET request
   @app.route('/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by(Category.id).all()
     entries = Entry.query.all()
-    
+
     cat_data = []
     ent_data = []
 
@@ -40,15 +41,17 @@ def create_app(test_config=None):
         "votes": entry.votes
       })
 
-    return render_template('categories.html', categories=cat_data, entries=ent_data)
+    return render_template(
+        'categories.html', categories=cat_data, entries=ent_data)
 
   @app.route('/categories/<int:id>', methods=['GET'])
-  def show_category():
+  def show_category(id):
     categories = Category.query.order_by(Category.id).all()
-    entries = Entry.query.filter(Entry.category==id.all()
-    
-    cat_data = []
-    ent_data = []
+    entries = Entry.query.filter(Entry.category == id).all()
+    showcat = Category.query.filter(Category.id == id).one()
+
+    cat_data=[]
+    ent_data=[]
 
     for category in categories:
       cat_data.append({
@@ -64,21 +67,21 @@ def create_app(test_config=None):
         "votes": entry.votes
       })
 
-    return render_template('show_category.html', categories=cat_data, showcat, entries=ent_data)
+    return render_template('show_category.html', categories=cat_data, showcat=showcat, entries=ent_data)
 
-  #TODO GET request
+  # TODO GET request
 
-  #TODO POST request
+  # TODO POST request
 
-  #TODO PATCH request
+  # TODO PATCH request
 
-  #TODO DELETE request
+  # TODO DELETE request
 
-  #TODO 4 @app.errorhandler
+  # TODO 4 @app.errorhandler
 
   return app
 
-APP = create_app()
+APP=create_app()
 
 if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=8080, debug=True)
