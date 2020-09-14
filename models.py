@@ -27,10 +27,10 @@ class Entry(db.Model):
 
     id = Column(db.Integer, primary_key=True) 
     name = Column(db.String)
-    category = Column(db.String)
+    category = Column(db.Integer)
     entry_url = Column(db.String)
     votes = Column(db.Integer)
-    date = Column(db.Date)
+    date = Column(db.Date, nullable=False, server_default=db.func.now())
 
     def __init__(self, name, category, entry_url, votes, date):
         self.name = name
