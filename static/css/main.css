@@ -80,15 +80,50 @@ body {
     border: 3px solid #808080;
   }
 
-  div.content div.entries p {
+  div.content div.entries div.lilpolaroid {
       display: inline-block;
-      color: #000000;
-      padding:5px 10px;
       width: 275px;
-      height: 275px;
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      margin-bottom: 25px;
   }
 
   div.content div.entries img {
-      height: 100%;
-      max-width: auto;
+      height: 275px;
+      max-width: 100%;
+  }
+
+  div.content div.entries div.lilcaption {
+    text-align: center;
+    padding: 10px 20px;
+  }
+
+  div.content div.polaroid {
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 25px;
+  }
+
+  div.content div.polaroid img {
+    max-height: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: fill;
+  }
+
+  div.content div.polaroid div.caption {
+    text-align: center;
+    padding: 10px 20px;
+  }
+
+  table {
+    width: 100%;
+  }
+  th {
+    text-align: left;
+  }
+
+  td {
+    text-align: right;
   }
