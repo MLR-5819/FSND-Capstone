@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+{% block title %} Add Entry | This Or That!{% endblock %}
+{% block content %}
+    <div class="content">
+        <h1>Add your Entry!</h1>
+        <form action="{{ url_for('add_entry') }}" method="post">
+            <input type="text" name="entryName">
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}
