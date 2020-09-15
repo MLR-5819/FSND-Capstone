@@ -90,18 +90,18 @@ def create_app(test_config=None):
       newE_url = form.get('url', None)
 
       try:
-        # insert into db
+        # insert into db ref project1
         success = True
   
       except:
         abort(422)
 
       finally:
-        #success
+        #success msg
 
       return redirect(url_for('get_categories'))
 
-    #category query to create drop down on form
+    #category query data to create drop down on form
     return render_template('add_entry.html', categories=data)
 
 
