@@ -11,13 +11,19 @@
         <h2>All Entries</h2>
         <div class="entries">
             {% for entry in entries %}
-            <p>
-                {{ entry.name }} | Total Votes: {{ entry.votes }}
-                <br>
+            <div class="lilpolaroid">
                 <a href="/entries/{{ entry.id }}">
                     <img src="{{ entry.image }}">
                 </a>
-            </p> 
+                <div class="lilcaption">
+                    <table>
+                        <tr>
+                            <th>{{ entry.name }}</th>
+                            <td>Total Votes: {{ entry.votes }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div> 
             {% endfor %}
         </div>    
     </div>
