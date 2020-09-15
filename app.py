@@ -83,26 +83,46 @@ def create_app(test_config=None):
     if request.method == 'POST':
       error = False
       success = False
-      form = request.get_json
+      form = request.get_json()
 
-      newE_name = form.get('name', None)
+      newE_name = form.get('entryName', None)
       newE_category = form.get('category', None)
       newE_url = form.get('url', None)
 
       try:
-        # insert into db ref project1
+        new_entry = Entry(
+          name=newE_name,
+          category=newE_category,
+          entry_url=newE_url)
+        
+        db.session.add(new_entry)
+        db.session.commit()
         success = True
-  
+
       except:
+        error = True
+        if error:
+          db.session.rollback()
+          #Alertbox
         abort(422)
 
       finally:
-        #success msg
+        db.session.close()
+        if success:
+          #alertboxsuccess msg
+          return redirect(url_for('get_categories'))
 
-      return redirect(url_for('get_categories'))
+    categories = Category.query.order_by(Category.id).all()
+    cat_data = []
+
+    for category in categories:
+      cat_data.append({
+        "id": category.id,
+        "type": category.type
+      })
 
     #category query data to create drop down on form
-    return render_template('add_entry.html', categories=data)
+    return render_template('add_entry.html', categories=cat_data)
 
 
   # TODO PATCH request
