@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+{% block title %}{{ entry.name }} | This Or That!{% endblock %}
+{% block content %}
+    <div class="content">
+        <h1>Entry Info</h1>
+        <a href="/categories" class="button">Back</a>
+        <div class="polaroid">
+            <div class="caption">
+            <table>
+                <tr>
+                    <th>Name: {{ entry.name }}</th>
+                    <td>Total Votes: {{ entry.votes }}</td>
+                </tr>
+                <tr>
+                    <th>Submitted: {{ entry.date }}</th>
+                    <td>Entry ID: {{ entry.id }}</td>
+                </tr>
+            </table>            
+            </div>
+            <img src="{{ entry.entry_url }}">
+       </div>    
+    </div>
+{% endblock %}
