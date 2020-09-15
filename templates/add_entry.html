@@ -4,7 +4,14 @@
     <div class="content">
         <h1>Add your Entry!</h1>
         <form action="{{ url_for('add_entry') }}" method="post">
-            <input type="text" name="entryName">
+            <label for="entryName">Entry Name: </label>
+            <input type="text" name="entryName"><br>
+            <label for="category">Choose a category:</label>
+                <select id="category" name="category">
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.type }}</option>
+                    {% endfor %}
+                </select>
             <input type="submit">
         </form>
     </div>
