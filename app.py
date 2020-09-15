@@ -18,7 +18,7 @@ def create_app(test_config=None):
   def index():
     return render_template('home.html')
 
-  # TODO GET request
+  # GET categories
   @app.route('/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by(Category.id).all()
@@ -44,14 +44,15 @@ def create_app(test_config=None):
     return render_template(
         'categories.html', categories=cat_data, entries=ent_data)
 
+  # GET one category
   @app.route('/categories/<int:id>', methods=['GET'])
   def show_category(id):
     categories = Category.query.order_by(Category.id).all()
     entries = Entry.query.filter(Entry.category == id).all()
     showcat = Category.query.filter(Category.id == id).one()
 
-    cat_data=[]
-    ent_data=[]
+    cat_data = []
+    ent_data = []
 
     for category in categories:
       cat_data.append({
@@ -68,6 +69,15 @@ def create_app(test_config=None):
       })
 
     return render_template('show_category.html', categories=cat_data, showcat=showcat, entries=ent_data)
+
+  # GET one entry
+  @app.route('/entries/<int:id>', methods=['GET'])
+  def show_entry(id):
+    entry = Entry.query.filter(Entry.id == id).one()
+    
+    return render_template('show_entry.html', entry=entry)
+
+
 
   # TODO GET request
 
