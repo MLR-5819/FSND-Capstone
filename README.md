@@ -3,12 +3,11 @@
 
 TODO:
 Create DB #done
-    Add data to DB
+    Add data to DB #done
 Define Models #done
-Define API endpoints
+Define API endpoints/Create simple frontend
 Define Auth0
-Create simple frontend
-test locally
+test locally (test.py)
 deploy to heroku
 test deployed app
 submit!
