@@ -1,7 +1,7 @@
 import os
 import random
 import json
-from flask import Flask, render_template, url_for, Response, request, abort, jsonify
+from flask import Flask, render_template, redirect, url_for, Response, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Entry, Category
@@ -77,11 +77,33 @@ def create_app(test_config=None):
     
     return render_template('show_entry.html', entry=entry)
 
-
-
-  # TODO GET request
-
   # TODO POST request
+  @app.route('/entries/add', methods=['GET', 'POST'])
+  def add_entry():
+    if request.method == 'POST':
+      error = False
+      success = False
+      form = request.get_json
+
+      newE_name = form.get('name', None)
+      newE_category = form.get('category', None)
+      newE_url = form.get('url', None)
+
+      try:
+        # insert into db
+        success = True
+  
+      except:
+        abort(422)
+
+      finally:
+        #success
+
+      return redirect(url_for('get_categories'))
+
+    #category query to create drop down on form
+    return render_template('add_entry.html', categories=data)
+
 
   # TODO PATCH request
 
