@@ -21,6 +21,10 @@ def setup_db(app, database_path = database_path):
     db.init_app(app)
     db.create_all()
 
+#link to app for db conn
+def link_db():
+    return db
+
 #Setup tables in database
 class Entry(db.Model):
     __tablename__ = 'entry'
