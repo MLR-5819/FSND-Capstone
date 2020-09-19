@@ -8,7 +8,7 @@
                 <a href="/categories/{{ category.id }}" class="button">{{ category.type }}</a>
             {% endfor %}
         </div>
-        <p><h2>All entries for: {{ showcat.type }}</h2> <a href="/categories" class="button">Back</a></p>
+        <p><h2>All entries for: {{ showcat.type }}</h2> <a href="{{ url_for('add_entry') }}" class="button">New</a> <a href="/categories" class="button">Back</a></p>
         <div class="entries">
             {% for entry in entries %}
             <div class="lilpolaroid">
