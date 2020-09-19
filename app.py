@@ -1,18 +1,23 @@
 import os
 import random
 import json
+from datetime import date
 from flask import Flask, render_template, redirect, url_for, Response, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, Entry, Category
+from models import setup_db, link_db, Entry, Category
+from forms import AddEntryForm
 # from auth import AuthError
 
+SECRET_KEY=os.urandom(32)
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
+  app.config['SECRET_KEY'] = SECRET_KEY
   CORS(app)
   setup_db(app)
+  db = link_db()
 
   @app.route('/')
   def index():
@@ -21,8 +26,8 @@ def create_app(test_config=None):
   # GET categories
   @app.route('/categories', methods=['GET'])
   def get_categories():
-    categories = Category.query.order_by(Category.id).all()
-    entries = Entry.query.all()
+    categories = Category.query.order_by(Category.type.asc()).all()
+    entries = Entry.query.order_by(Entry.date.desc()).all()
 
     cat_data = []
     ent_data = []
@@ -47,8 +52,8 @@ def create_app(test_config=None):
   # GET one category
   @app.route('/categories/<int:id>', methods=['GET'])
   def show_category(id):
-    categories = Category.query.order_by(Category.id).all()
-    entries = Entry.query.filter(Entry.category == id).all()
+    categories = Category.query.order_by(Category.type.asc()).all()
+    entries = Entry.query.filter(Entry.category == id).order_by(Entry.date.desc()).all()
     showcat = Category.query.filter(Category.id == id).one()
 
     cat_data = []
@@ -83,19 +88,18 @@ def create_app(test_config=None):
     if request.method == 'POST':
       error = False
       success = False
-      form = request.get_json()
-
-      newE_name = form.get('entryName', None)
-      newE_category = form.get('category', None)
-      newE_url = form.get('url', None)
 
       try:
-        new_entry = Entry(
-          name=newE_name,
-          category=newE_category,
-          entry_url=newE_url)
+        form = AddEntryForm()
+
+        entry = Entry(
+          name=form.name.data,
+          category=form.category.data,
+          entry_url=form.url.data,
+          votes="0",
+          date=date.today())
         
-        db.session.add(new_entry)
+        db.session.add(entry)
         db.session.commit()
         success = True
 
@@ -112,22 +116,22 @@ def create_app(test_config=None):
           #alertboxsuccess msg
           return redirect(url_for('get_categories'))
 
-    categories = Category.query.order_by(Category.id).all()
-    cat_data = []
-
-    for category in categories:
-      cat_data.append({
-        "id": category.id,
-        "type": category.type
-      })
-
-    #category query data to create drop down on form
-    return render_template('add_entry.html', categories=cat_data)
+    categories = Category.query.order_by(Category.type.asc()).all()
+    cat_list = [(i.id, i.type) for i in categories]
+    form = AddEntryForm()
+    form.category.choices = cat_list
+    
+    return render_template('add_entry.html', form=form)
 
 
   # TODO PATCH request
+  # AUTH Users can update entry
 
   # TODO DELETE request
+  # Auth Admin can delete
+
+  # TODO Play section
+  
 
   # TODO 4 @app.errorhandler
 
