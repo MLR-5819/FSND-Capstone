@@ -5,7 +5,7 @@
         <h1>Entry Info</h1>
         <a href="/categories" class="button">Back</a> 
         <a href="{{ url_for('update_entry', id=entry.id) }}" class="button">Update</a>
-        <a href="{{ url_for('delete_entry') }}" class="button">Delete</a>
+        <a href="{{ url_for('delete_entry', id=entry.id) }}" class="button">Delete</a>
         <div class="polaroid">
             <div class="caption">
             <table>
