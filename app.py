@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, link_db, Entry, Category
 from forms import AddEntryForm, UpdateEntryForm
-# from auth import AuthError
+from auth import AuthError, requires_auth
 
 SECRET_KEY=os.urandom(32)
 
@@ -84,6 +84,7 @@ def create_app(test_config=None):
 
   # TODO POST request
   @app.route('/entries/add', methods=['GET', 'POST'])
+  # @requires_auth('post:entry')
   def add_entry():
     if request.method == 'POST':
       error = False
@@ -127,8 +128,8 @@ def create_app(test_config=None):
   # TODO PATCH request
   # AUTH Users can update entry
   @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
-  #@requires_auth()
-  def update_entry(id):
+  @requires_auth('patch:entry')
+  def update_entry(token, id):
     entry = Entry.query.filter(Entry.id == id).one()
     category = Category.query.filter(Category.id == entry.category).one()
     if not entry:
@@ -171,8 +172,8 @@ def create_app(test_config=None):
   # TODO DELETE request
   # Auth Admin can delete
   @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
-  # @requires_auth()
-  def delete_entry(id):
+  @requires_auth('delete:entry')
+  def delete_entry(token, id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     if not entry:
       abort(404)
@@ -204,6 +205,7 @@ def create_app(test_config=None):
   # TODO Results Section
 
   # TODO 4 @app.errorhandler
+  
   @app.errorhandler(400)
   def bad_request(error):
     return jsonify({
