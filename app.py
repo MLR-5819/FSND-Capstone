@@ -2,11 +2,11 @@ import os
 import random
 import json
 from datetime import date
-from flask import Flask, render_template, redirect, url_for, Response, request, abort, jsonify
+from flask import Flask, render_template, redirect, url_for, Response, request, abort, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, link_db, Entry, Category
-from forms import AddEntryForm
+from forms import AddEntryForm, UpdateEntryForm
 # from auth import AuthError
 
 SECRET_KEY=os.urandom(32)
@@ -126,14 +126,131 @@ def create_app(test_config=None):
 
   # TODO PATCH request
   # AUTH Users can update entry
+  @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
+  #@requires_auth()
+  def update_entry(id):
+    entry = Entry.query.filter(Entry.id == id).one()
+    category = Category.query.filter(Category.id == entry.category).one()
+    if not entry:
+      abort(404)
+    
+    if request.method == 'GET':
+      categories = Category.query.order_by(Category.type.asc()).all()
+      cat_list = [(i.id, i.type) for i in categories]
+      form = UpdateEntryForm()
+      form.category.choices = cat_list
+      
+      return render_template('update_entry.html', form=form, category=category, entry=entry)
+    
+    error = False
+    success = False
+      
+    try:
+      update = UpdateEntryForm()
+      entry.name = update.name.data
+      entry.category = update.category.data
+
+      db.session.commit()
+      success = True
+
+    except:
+      error = True
+      if error:
+        db.session.rollback()
+        #Alertbox
+      abort(422)
+      
+    finally:
+      db.session.close()
+      #if success:
+        #alertboxsuccess msg
+      
+    return redirect(url_for('get_categories'))
+     
 
   # TODO DELETE request
   # Auth Admin can delete
+  @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
+  # @requires_auth()
+  def delete_entry(id):
+    entry = Entry.query.filter(Entry.id == id).one_or_none()
+    if not entry:
+      abort(404)
+
+    error = False
+    success = False
+
+    try:
+      db.session.delete(entry)
+      db.session.commit()
+      success = True
+
+    except:
+      error = True
+      if error:
+        db.session.rollback()
+        #Alertbox
+      abort(422)
+
+    finally:
+      db.session.close()
+      #if success:
+        #alertboxsuccess msg
+
+    return redirect(url_for('get_categories'))
 
   # TODO Play section
-  
+
+  # TODO Results Section
 
   # TODO 4 @app.errorhandler
+  @app.errorhandler(400)
+  def bad_request(error):
+    return jsonify({
+      "success": False,
+      "error": 400,
+      "message": "Bad Request"
+    }), 400
+
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      "success": False,
+       "error": 404,
+       "message": "Resource Not Found"
+    }), 404
+
+  @app.errorhandler(405)
+  def not_found(error):
+    return jsonify({
+      "success": False,
+      "error": 405,
+      "message": "Method Not Allowed"
+    }), 405
+
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return jsonify({
+      "success": False,
+      "error": 422,
+      "message": "Unprocessable"
+    }), 422
+
+  @app.errorhandler(500)
+  def unprocessable(error):
+    return jsonify({
+      "success": False,
+      "error": 500,
+      "message": "Internal Server Error"
+    }), 500
+
+  @app.errorhandler(AuthError)
+  def auth_error(error):  
+    return jsonify({
+      "success": False,
+      "error": error.status_code,
+      "message": error.error
+    }), error.status_code
 
   return app
 
