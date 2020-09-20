@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% block title %} Update Entry | This Or That!{% endblock %}
+{% block content %}
+    <div class="content">
+        <h1>Update your Entry!</h1>
+        <div class="entries">
+            <div class="lilpolaroid">
+                <a href="/entries/{{ entry.id }}">
+                    <img src="{{ entry.entry_url }}">
+                </a>
+                <div class="lilcaption">
+                    <table>
+                        <tr>
+                            <th>{{ entry.name }}</th>
+                            <td>{{ category.type }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <h3>Make changes to your entry below.</h3>
+        <form action="{{ url_for('update_entry', id=entry.id) }}" method="POST">
+            <input type="hidden" name="_METHOD" value="PATCH">
+            <br>{{ form.name.label }}<br>{{ form.name }}<br>
+            <br>{{ form.category.label }}<br>{{ form.category}}<br>
+            {{ form.submit }}
+        </form>
+    </div>
+{% endblock %}
