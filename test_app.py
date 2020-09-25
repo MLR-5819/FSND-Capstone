@@ -28,7 +28,27 @@ class ThisOrThatTestCase(unittest.TestCase):
 
     def test_index(self):
         result = self.client().get('/')
+
         self.assertEqual(result.status_code, 200)
+
+    def test_get_categories(self):
+        result = self.client().get('/api/categories')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['entries'])
+
+    def test_404_no_categories(self):
+        result = self.client().get('/api/categories/0')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
+
+
 
 
 # Make the tests conveniently executable
