@@ -82,7 +82,7 @@ def create_app(test_config=None):
     
     return render_template('show_entry.html', entry=entry)
 
-  # TODO POST request
+  # DONE POST request
   @app.route('/entries/add', methods=['GET', 'POST'])
   # @requires_auth('post:entry')
   def add_entry():
@@ -128,8 +128,8 @@ def create_app(test_config=None):
   # TODO PATCH request
   # AUTH Users can update entry
   @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
-  @requires_auth('patch:entry')
-  def update_entry(token, id):
+  @requires_auth(permission='patch:entry')
+  def update_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one()
     category = Category.query.filter(Category.id == entry.category).one()
     if not entry:
@@ -172,8 +172,8 @@ def create_app(test_config=None):
   # TODO DELETE request
   # Auth Admin can delete
   @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
-  @requires_auth('delete:entry')
-  def delete_entry(token, id):
+  @requires_auth(permission='delete:entry')
+  def delete_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     if not entry:
       abort(404)
@@ -200,11 +200,14 @@ def create_app(test_config=None):
 
     return redirect(url_for('get_categories'))
 
-  # TODO Play section
+  # TODO Play section for future version
+  @app.route('/play')
+  def play():
+    return render_template('play.html')
+    
+  # TODO Results Section for future version
 
-  # TODO Results Section
-
-  # TODO 4 @app.errorhandler
+  # DONE 4 @app.errorhandler
   
   @app.errorhandler(400)
   def bad_request(error):
