@@ -40,14 +40,22 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertTrue(data['entries'])
 
-    def test_404_no_categories(self):
+    def test_show_categories(self):
+        result = self.client().get('/api/categories/1')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['entries'])
+
+    def test_404_no_show_categories(self):
         result = self.client().get('/api/categories/0')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource Not Found')
-
 
 
 
