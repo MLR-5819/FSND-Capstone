@@ -25,9 +25,13 @@ def create_app(test_config=None):
 
   # GET categories
   @app.route('/categories', methods=['GET'])
+  @app.route('/api/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by(Category.type.asc()).all()
     entries = Entry.query.order_by(Entry.date.desc()).all()
+
+    if not categories:
+      abort(404)
 
     cat_data = []
     ent_data = []
@@ -46,6 +50,13 @@ def create_app(test_config=None):
         "votes": entry.votes
       })
 
+    if request.path == '/api/categories':
+      return jsonify({
+        'success': True,
+        'categories': cat_data,
+        'entries': ent_data
+      }), 200
+
     return render_template(
         'categories.html', categories=cat_data, entries=ent_data)
 
@@ -55,6 +66,9 @@ def create_app(test_config=None):
     categories = Category.query.order_by(Category.type.asc()).all()
     entries = Entry.query.filter(Entry.category == id).order_by(Entry.date.desc()).all()
     showcat = Category.query.filter(Category.id == id).one()
+
+    if not categories:
+      abort(404)
 
     cat_data = []
     ent_data = []
@@ -79,7 +93,9 @@ def create_app(test_config=None):
   @app.route('/entries/<int:id>', methods=['GET'])
   def show_entry(id):
     entry = Entry.query.filter(Entry.id == id).one()
-    
+    if not entry:
+      abort(404)
+
     return render_template('show_entry.html', entry=entry)
 
   # DONE POST request
@@ -132,6 +148,7 @@ def create_app(test_config=None):
   def update_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one()
     category = Category.query.filter(Category.id == entry.category).one()
+    
     if not entry:
       abort(404)
     
@@ -175,6 +192,7 @@ def create_app(test_config=None):
   @requires_auth(permission='delete:entry')
   def delete_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
+    
     if not entry:
       abort(404)
 
@@ -204,7 +222,7 @@ def create_app(test_config=None):
   @app.route('/play')
   def play():
     return render_template('play.html')
-    
+
   # TODO Results Section for future version
 
   # DONE 4 @app.errorhandler
