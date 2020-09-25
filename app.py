@@ -62,12 +62,13 @@ def create_app(test_config=None):
 
   # GET one category
   @app.route('/categories/<int:id>', methods=['GET'])
+  @app.route('/api/categories/<int:id>', methods=['GET'])
   def show_category(id):
     categories = Category.query.order_by(Category.type.asc()).all()
     entries = Entry.query.filter(Entry.category == id).order_by(Entry.date.desc()).all()
-    showcat = Category.query.filter(Category.id == id).one()
+    showcat = Category.query.filter(Category.id == id).one_or_none()
 
-    if not categories:
+    if not showcat:
       abort(404)
 
     cat_data = []
@@ -86,6 +87,13 @@ def create_app(test_config=None):
         "image": entry.entry_url,
         "votes": entry.votes
       })
+
+    if request.path == '/api/categories/' + str(id):
+      return jsonify({
+        'success': True,
+        'categories': cat_data,
+        'entries': ent_data
+      }), 200
 
     return render_template('show_category.html', categories=cat_data, showcat=showcat, entries=ent_data)
 
