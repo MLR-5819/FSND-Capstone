@@ -82,11 +82,29 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertTrue(data['entries'])
 
-    #def test_post_add_entry(self):
+    def test_post_add_entry(self):
+        new_entry = {
+            'name': 'test entry',
+            'category': 1,
+            'url': 'www.google.com'
+        }
 
-    #def test_422_failed_add_entry(self):
+        result = self.client().post('/api/entries/add', json = new_entry)
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_400_failed_add_entry(self):
+        result = self.client().post('/api/entries/add', data=dict(name='test no url', category='1', url=''))
+        data = result.get_json()
+
+        self.assertEqual(result.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Bad Request')
+        
     
-    #def test_update_entry(self):
+    #def test_get_update_entry(self):
 
     #def test_404_failed_no_update_entry(self):
 
