@@ -122,18 +122,25 @@ def create_app(test_config=None):
 
     return render_template('show_entry.html', entry=entry)
 
-  # DONE POST request
+  # POST request
   @app.route('/api/entries/add', methods=['GET', 'POST'])
   @app.route('/entries/add', methods=['GET', 'POST'])
-  # @requires_auth('post:entry') App allows non-user to add entries
+  # @requires_auth('post:entry') Not Implemented: App allows non-user to add entries
   def add_entry():
     if request.method == 'POST':
       error = False
       success = False
 
-      try:
-        form = AddEntryForm()
+      form = AddEntryForm()
+      
+      if not form.name.data:
+        abort(400)
+      if not form.category.data:
+        abort(400)
+      if not form.url.data:
+        abort(400)
 
+      try:
         entry = Entry(
           name=form.name.data,
           category=form.category.data,
@@ -149,14 +156,20 @@ def create_app(test_config=None):
         error = True
         if error:
           db.session.rollback()
-          #Alertbox
+          flash('ERROR: Entry ' + form.name.data + ' could not be added! Please try again.')
         abort(422)
 
       finally:
         db.session.close()
         if success:
-          #alertboxsuccess msg
-          return redirect(url_for('get_categories'))
+          flash('Entry' + form.name.data + ' was successfully added!')
+          
+          if request.path == '/api/entries/add':
+            return jsonify({
+            'success': True,
+          }), 200
+
+        return redirect(url_for('get_categories'))
 
     categories = Category.query.order_by(Category.type.asc()).all()
     cat_list = [(i.id, i.type) for i in categories]
@@ -166,7 +179,7 @@ def create_app(test_config=None):
     return render_template('add_entry.html', form=form)
 
 
-  # TODO PATCH request
+  # PATCH request
   # AUTH Users can update entry
   @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
   @requires_auth(permission='patch:entry')
@@ -200,18 +213,18 @@ def create_app(test_config=None):
       error = True
       if error:
         db.session.rollback()
-        #Alertbox
+        flash('ERROR: Entry ' + form.name.data + ' could not be updated! Please try again.')
       abort(422)
       
     finally:
       db.session.close()
-      #if success:
-        #alertboxsuccess msg
+      if success:
+        flash('Entry' + form.name.data + ' was successfully updated!')
       
     return redirect(url_for('get_categories'))
      
 
-  # TODO DELETE request
+  # DELETE request
   # Auth Admin can delete
   @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
   @requires_auth(permission='delete:entry')
@@ -233,15 +246,19 @@ def create_app(test_config=None):
       error = True
       if error:
         db.session.rollback()
-        #Alertbox
+        flash('Entry' + form.name.data + ' could not be deleted! Please try again.')
       abort(422)
 
     finally:
       db.session.close()
-      #if success:
-        #alertboxsuccess msg
+      if success:
+        flash('Entry' + form.name.data + ' was successfully deleted!')
 
     return redirect(url_for('get_categories'))
+
+  @app.route('/logout')
+  def logout():
+    return redirect('https://dev-mrose.us.auth0.com/v2/logout?client_id=kYWBov5tyiYk90E6osGWhtF5IKxCfKzN&returnTo=https://udacity-fsnd-tot.herokuapp.com/')
 
   # TODO Play section for future version
   @app.route('/play')
@@ -250,7 +267,7 @@ def create_app(test_config=None):
 
   # TODO Results Section for future version
 
-  # DONE 4 @app.errorhandler
+  # 4 @app.errorhandler
   
   @app.errorhandler(400)
   def bad_request(error):
