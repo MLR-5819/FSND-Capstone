@@ -57,8 +57,7 @@ def create_app(test_config=None):
         'entries': ent_data
       }), 200
 
-    return render_template(
-        'categories.html', categories=cat_data, entries=ent_data)
+    return render_template('categories.html', categories=cat_data, entries=ent_data)
 
   # GET one category
   @app.route('/api/categories/<int:id>', methods=['GET'])
