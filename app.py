@@ -24,8 +24,8 @@ def create_app(test_config=None):
     return render_template('home.html')
 
   # GET categories
-  @app.route('/categories', methods=['GET'])
   @app.route('/api/categories', methods=['GET'])
+  @app.route('/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by(Category.type.asc()).all()
     entries = Entry.query.order_by(Entry.date.desc()).all()
@@ -61,8 +61,8 @@ def create_app(test_config=None):
         'categories.html', categories=cat_data, entries=ent_data)
 
   # GET one category
-  @app.route('/categories/<int:id>', methods=['GET'])
   @app.route('/api/categories/<int:id>', methods=['GET'])
+  @app.route('/categories/<int:id>', methods=['GET'])
   def show_category(id):
     categories = Category.query.order_by(Category.type.asc()).all()
     entries = Entry.query.filter(Entry.category == id).order_by(Entry.date.desc()).all()
@@ -98,8 +98,8 @@ def create_app(test_config=None):
     return render_template('show_category.html', categories=cat_data, showcat=showcat, entries=ent_data)
 
   # GET one entry
-  @app.route('/entries/<int:id>', methods=['GET'])
   @app.route('/api/entries/<int:id>', methods=['GET'])
+  @app.route('/entries/<int:id>', methods=['GET'])
   def show_entry(id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     
@@ -124,8 +124,8 @@ def create_app(test_config=None):
     return render_template('show_entry.html', entry=entry)
 
   # DONE POST request
+  @app.route('/api/entries/add', methods=['GET', 'POST'])
   @app.route('/entries/add', methods=['GET', 'POST'])
-  @app.route('api/entries/add', methods=['GET', 'POST'])
   # @requires_auth('post:entry') App allows non-user to add entries
   def add_entry():
     if request.method == 'POST':
