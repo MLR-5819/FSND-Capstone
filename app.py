@@ -99,16 +99,34 @@ def create_app(test_config=None):
 
   # GET one entry
   @app.route('/entries/<int:id>', methods=['GET'])
+  @app.route('/api/entries/<int:id>', methods=['GET'])
   def show_entry(id):
-    entry = Entry.query.filter(Entry.id == id).one()
+    entry = Entry.query.filter(Entry.id == id).one_or_none()
+    
     if not entry:
       abort(404)
+
+    ent_data = []
+
+    ent_data.append({
+        "id": entry.id,
+        "name": entry.name,
+        "image": entry.entry_url,
+        "votes": entry.votes
+    })
+
+    if request.path == '/api/entries/' + str(id):
+      return jsonify({
+        'success': True,
+        'entry': ent_data
+      }), 200
 
     return render_template('show_entry.html', entry=entry)
 
   # DONE POST request
   @app.route('/entries/add', methods=['GET', 'POST'])
-  # @requires_auth('post:entry')
+  @app.route('api/entries/add', methods=['GET', 'POST'])
+  # @requires_auth('post:entry') App allows non-user to add entries
   def add_entry():
     if request.method == 'POST':
       error = False
