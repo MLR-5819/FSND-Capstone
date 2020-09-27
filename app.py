@@ -181,28 +181,58 @@ def create_app(test_config=None):
 
   # PATCH request
   # AUTH Users can update entry
+  @app.route('/api/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
   @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
-  @requires_auth(permission='patch:entry')
-  def update_entry(payload, id):
-    entry = Entry.query.filter(Entry.id == id).one()
-    category = Category.query.filter(Category.id == entry.category).one()
+  #@requires_auth(permission='patch:entry')
+  def update_entry(id): #payload
+    entry = Entry.query.filter(Entry.id == id).one_or_none()
     
     if not entry:
       abort(404)
+
+    category = Category.query.filter(Category.id == entry.category).one_or_none()
     
     if request.method == 'GET':
       categories = Category.query.order_by(Category.type.asc()).all()
       cat_list = [(i.id, i.type) for i in categories]
       form = UpdateEntryForm()
       form.category.choices = cat_list
+
+      if request.path == '/api/entries/' + str(id) + '/update':
+        ent_data = []
+        cat_data = []
+
+        ent_data.append({
+          "id": entry.id,
+          "name": entry.name,
+          "image": entry.entry_url,
+          "votes": entry.votes
+        })
+
+        cat_data.append({
+          "id": category.id,
+          "type": category.type
+        })
+
+        return jsonify({
+          'success': True,
+          'category': cat_data,
+          'entry': ent_data
+        }), 200
       
       return render_template('update_entry.html', form=form, category=category, entry=entry)
     
     error = False
     success = False
       
+    update = UpdateEntryForm()
+    
+    if not update.name.data:
+      abort(400)
+    if not update.category.data:
+      abort(400)
+    
     try:
-      update = UpdateEntryForm()
       entry.name = update.name.data
       entry.category = update.category.data
 
@@ -213,13 +243,17 @@ def create_app(test_config=None):
       error = True
       if error:
         db.session.rollback()
-        flash('ERROR: Entry ' + form.name.data + ' could not be updated! Please try again.')
+        flash('ERROR: Entry ' + update.name.data + ' could not be updated! Please try again.')
       abort(422)
       
     finally:
       db.session.close()
       if success:
-        flash('Entry' + form.name.data + ' was successfully updated!')
+        flash('Entry' + update.name.data + ' was successfully updated!')
+      if request.path == '/api/entries/' + str(id) + '/update':
+            return jsonify({
+            'success': True,
+          }), 200
       
     return redirect(url_for('get_categories'))
      
@@ -246,13 +280,13 @@ def create_app(test_config=None):
       error = True
       if error:
         db.session.rollback()
-        flash('Entry' + form.name.data + ' could not be deleted! Please try again.')
+        flash('Entry could not be deleted! Please try again.')
       abort(422)
 
     finally:
       db.session.close()
       if success:
-        flash('Entry' + form.name.data + ' was successfully deleted!')
+        flash('Entry was successfully deleted!')
 
     return redirect(url_for('get_categories'))
 
