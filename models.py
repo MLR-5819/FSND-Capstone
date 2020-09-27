@@ -60,7 +60,8 @@ class Entry(db.Model):
             'name': self.name,
             'category': self.category,
             'entry_url': self.entry_url,
-            'votes': self.votes
+            'votes': self.votes,
+            'date':self.date
         }
 
 
