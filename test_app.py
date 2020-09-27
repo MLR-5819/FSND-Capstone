@@ -82,21 +82,21 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertTrue(data['entries'])
 
-    def test_post_add_entry(self):
+    #def test_post_add_entry(self):
 
-    def test_422_failed_add_entry(self):
+    #def test_422_failed_add_entry(self):
     
-    def test_update_entry(self):
+    #def test_update_entry(self):
 
-    def test_404_failed_no_update_entry(self):
+    #def test_404_failed_no_update_entry(self):
 
-    def test_422_failed_update_entry(self):
+    #def test_422_failed_update_entry(self):
 
-    def test_delete_entry(self):
+    #def test_delete_entry(self):
     
-    def test_404_failed_delete_no_entry(self):
+    #def test_404_failed_delete_no_entry(self):
 
-    def test_422_failed_delete_entry(self):
+    #def test_422_failed_delete_entry(self):
 
     #400 error
     #405 error
