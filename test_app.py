@@ -82,18 +82,18 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertTrue(data['entries'])
 
-    def test_post_add_entry(self):
-        new_entry = {
-            'name': 'test entry',
-            'category': 1,
-            'url': 'www.google.com'
-        }
+    #def test_post_add_entry(self):
+    #    new_entry = {
+    #        'name': 'test entry',
+    #        'category': 1,
+    #        'url': 'www.google.com'
+    #    }
 
-        result = self.client().post('/api/entries/add', json = new_entry)
-        data = json.loads(result.data)
+    #    result = self.client().post('/api/entries/add', json=new_entry)
+    #    data = json.loads(result.data)
 
-        self.assertEqual(result.status_code, 200)
-        self.assertEqual(data['success'], True)
+    #    self.assertEqual(result.status_code, 200)
+    #    self.assertEqual(data['success'], True)
 
     def test_400_failed_add_entry(self):
         result = self.client().post('/api/entries/add', data=dict(name='test no url', category='1', url=''))
@@ -104,19 +104,74 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Bad Request')
         
     
-    #def test_get_update_entry(self):
+    def test_get_update_entry(self):
+        result = self.client().get('/api/entries/1/update')
+        data = json.loads(result.data)
 
-    #def test_404_failed_no_update_entry(self):
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['category'])
+        self.assertTrue(data['entry'])
 
-    #def test_422_failed_update_entry(self):
+    #def test_401_patch_not_auth_update_entry(self):
+    #    patch_entry = {
+    #        'id': 46,
+    #        'name': 'updated test entry',
+    #        'category': 2
+    #    }
+        
+    #    result = self.client().patch('/api/entries/46/update', json=patch_entry)
+    #    data = json.loads(result.data)
+
+    #    self.assertEqual(result.status_code, 401)
+    #    self.assertEqual(data['success'], False)
+
+    def test_patch_update_entry(self):
+        patch_entry = {
+            'id': 46,
+            'name': 'updated test entry',
+            'category': 2
+        }
+
+        #add in auth
+        result = self.client().patch('/api/entries/46/update', json=patch_entry)
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+
+    def test_404_failed_no_update_entry(self):
+        patch_entry = {
+            'id': 100000,
+            'name': 'updated test entry',
+            'category': 2
+        }
+        #add in auth
+        result = self.client().patch('/api/entries/100000/update', json=patch_entry)
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
+
+    def test_400_failed_update_entry(self):
+        #addinauth
+        result = self.client().patch('/api/entries/47/update', data=dict(name='test no category', category=''))
+        data = result.get_json()
+
+        self.assertEqual(result.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Bad Request')
 
     #def test_delete_entry(self):
+
+    #def test_401_not_auth_delete_entry(self):
     
     #def test_404_failed_delete_no_entry(self):
 
     #def test_422_failed_delete_entry(self):
 
-    #400 error
     #405 error
     #500 error
 
