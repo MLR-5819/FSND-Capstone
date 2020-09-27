@@ -57,7 +57,50 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource Not Found')
 
+    def test_show_entry(self):
+        result = self.client().get('/api/entries/1')
+        data = json.loads(result.data)
 
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['entry'])
+
+    def test_404_no_show_entry(self):
+        result = self.client().get('/api/entries/100000')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
+
+    def test_get_add_entry(self):
+        result = self.client().get('/api/categories')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['entries'])
+
+    def test_post_add_entry(self):
+
+    def test_422_failed_add_entry(self):
+    
+    def test_update_entry(self):
+
+    def test_404_failed_no_update_entry(self):
+
+    def test_422_failed_update_entry(self):
+
+    def test_delete_entry(self):
+    
+    def test_404_failed_delete_no_entry(self):
+
+    def test_422_failed_delete_entry(self):
+
+    #400 error
+    #405 error
+    #500 error
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
