@@ -15,8 +15,13 @@
                         <li><a href="{{ url_for('add_entry') }}">ADD ENTRY</a></li>
                         <li><a href="{{ url_for('play') }}">PLAY</a></li>
                         <br><hr>
-                        <li><a href="https://dev-mrose.us.auth0.com/u/signup?state=g6Fo2SAzbURMX1FtRXhZSjV5Um9xVE5NcENzTDlSUnBJMGh1c6N0aWTZIDhMcUxlZDBhVi1CVFI1ekRCeUk1NnV5TkhuS09lVlI3o2NpZNkga1lXQm92NXR5aVlrOTBFNm9zR1dodEY1SUt4Q2ZLek4">Sign up</a></li>
-                        <li><a href="http://dev-mrose.us.auth0.com/authorize?audience=tot&response_type=token&client_id=kYWBov5tyiYk90E6osGWhtF5IKxCfKzN&redirect_uri=https://udacity-fsnd-tot.herokuapp.com/">Log in</a></li>
+                        {% if not session %}
+                        <li><a href="https://dev-mrose.us.auth0.com/authorize?audience=tot&response_type=token&client_id=kYWBov5tyiYk90E6osGWhtF5IKxCfKzN&screen_hint=signup&redirect_uri=https://udacity-fsnd-tot.herokuapp.com/">Sign up</a></li>
+                        <li><a href="https://dev-mrose.us.auth0.com/authorize?audience=tot&response_type=token&client_id=kYWBov5tyiYk90E6osGWhtF5IKxCfKzN&redirect_uri=https://udacity-fsnd-tot.herokuapp.com/">Log in</a></li>
+                        {% endif %}
+                        {% if session %}
+                        <li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
