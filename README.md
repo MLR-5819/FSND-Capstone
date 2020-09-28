@@ -35,9 +35,9 @@ start of README.md content below
 
 ### Overview
 
-This app is nearly complete. However, it is missing a few things. The 'Play' and 'Social' features have not been implemented. For now anyone can add their favorite pictures to grow the database. To make updates to your submission you must sign up. To request deletion of your submission, please email our Administrator.  
+This app is nearly complete. However, it is missing a few things. The 'Play' and 'Social' features have not been implemented. For now anyone can add their favorite pictures to grow the database. To make updates to your submission you must sign up. To request deletion of your submission, please email our Administrator.  *App only created for this project*
 
-### Tech Stack
+## Tech Stack
 
 Our tech stack will include:
 
@@ -50,7 +50,7 @@ Our tech stack will include:
 * **HTML** & **CSS** - website's frontend
 * Other requirements listed in requirements.txt **update file
 
-### Main Files: Project Structure
+## Main Files: Project Structure
 
   ```sh
   ├── README.md
@@ -73,4 +73,36 @@ Our tech stack will include:
   └── templates
   ```
 
+## Development Setup
+
+[Install Flask](http://flask.pocoo.org/docs/1.0/installation/#install-flask)
+
+  ```
+  $ cd ~
+  $ sudo pip install Flask
+  ```
+
+To start/run the local dev server:
+
+1. Install the dependencies:
+  ```
+  $ pip install -r requirements.txt
+  ```
+
+2. Run the development server:
+  ```
+  $ export FLASK_APP=app.py
+  $ export FLASK_ENV=development
+  $ python app.py
+  ```
+
+4. Navigate to page [http://localhost:8080](http://localhost:8080)
+
+## Endpoints
+
+### The following are the available API endpoints:
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | / | Welcome page
 
