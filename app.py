@@ -260,9 +260,10 @@ def create_app(test_config=None):
 
   # DELETE request
   # Auth Admin can delete
+  @app.route('/api/entries/<int:id>/delete', methods=['GET', 'DELETE'])
   @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
-  @requires_auth(permission='delete:entry')
-  def delete_entry(payload, id):
+  #@requires_auth(permission='delete:entry')
+  def delete_entry(id): #payload
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     
     if not entry:
@@ -287,6 +288,10 @@ def create_app(test_config=None):
       db.session.close()
       if success:
         flash('Entry was successfully deleted!')
+      if request.path == '/api/entries/' + str(id) + '/delete':
+            return jsonify({
+            'success': True,
+          }), 200
 
     return redirect(url_for('get_categories'))
 
