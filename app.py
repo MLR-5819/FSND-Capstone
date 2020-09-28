@@ -183,8 +183,8 @@ def create_app(test_config=None):
   # AUTH Users can update entry
   @app.route('/api/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
   @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
-  #@requires_auth(permission='patch:entry')
-  def update_entry(id): #payload
+  @requires_auth(permission='patch:entry')
+  def update_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     
     if not entry:
@@ -262,8 +262,8 @@ def create_app(test_config=None):
   # Auth Admin can delete
   @app.route('/api/entries/<int:id>/delete', methods=['GET', 'DELETE'])
   @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
-  #@requires_auth(permission='delete:entry')
-  def delete_entry(id): #payload
+  @requires_auth(permission='delete:entry')
+  def delete_entry(payload, id):
     entry = Entry.query.filter(Entry.id == id).one_or_none()
     
     if not entry:
