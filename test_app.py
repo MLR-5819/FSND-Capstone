@@ -127,6 +127,7 @@ class ThisOrThatTestCase(unittest.TestCase):
     #    self.assertEqual(data['success'], False)
 
     def test_patch_update_entry(self):
+        #update API endpoint ID to match your database
         patch_entry = {
             'id': 46,
             'name': 'updated test entry',
@@ -157,20 +158,39 @@ class ThisOrThatTestCase(unittest.TestCase):
 
     def test_400_failed_update_entry(self):
         #addinauth
-        result = self.client().patch('/api/entries/47/update', data=dict(name='test no category', category=''))
+        #update API endpoint ID to match your database
+        result = self.client().patch('/api/entries/49/update', data=dict(name='test no category', category=''))
         data = result.get_json()
 
         self.assertEqual(result.status_code, 400)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Bad Request')
 
-    #def test_delete_entry(self):
+    def test_delete_entry(self):
+        #update API endpoint ID to match your database
+        result = self.client().get('/api/entries/48/delete')
+        data = json.loads(result.data)
+        #addinauth
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(data['success'], True)
 
-    #def test_401_not_auth_delete_entry(self):
+    def test_401_not_auth_delete_entry(self):
+        #update API endpoint ID to match your database
+        result = self.client().get('/api/entries/48/delete')
+        data = json.loads(result.data)
+
+        self.assertEqual(result.status_code, 401)
+        self.assertEqual(data['success'], False)
     
-    #def test_404_failed_delete_no_entry(self):
+    def test_404_failed_delete_no_entry(self):
+        result = self.client().get('/api/entries/100000/delete')
+        data = json.loads(result.data)
 
-    #def test_422_failed_delete_entry(self):
+        self.assertEqual(result.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
+
+    #def test_422_database_error(self):
 
     #405 error
     #500 error
