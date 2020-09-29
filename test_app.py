@@ -36,7 +36,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
 
     def test_get_categories(self):
-        result = self.client().get('/api/categories')
+        result = self.client().get('/apicategories')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 200)
@@ -45,7 +45,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['entries'])
 
     def test_show_categories(self):
-        result = self.client().get('/api/categories/1')
+        result = self.client().get('/apicategories/1')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 200)
@@ -54,7 +54,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['entries'])
 
     def test_404_no_show_categories(self):
-        result = self.client().get('/api/categories/0')
+        result = self.client().get('/apicategories/0')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 404)
@@ -62,7 +62,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Resource Not Found')
 
     def test_show_entry(self):
-        result = self.client().get('/api/entries/1')
+        result = self.client().get('/apientries/1')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 200)
@@ -70,7 +70,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertTrue(data['entry'])
 
     def test_404_no_show_entry(self):
-        result = self.client().get('/api/entries/100000')
+        result = self.client().get('/apientries/100000')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 404)
@@ -78,7 +78,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Resource Not Found')
 
     def test_get_add_entry(self):
-        result = self.client().get('/api/categories')
+        result = self.client().get('/apicategories')
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 200)
@@ -93,14 +93,14 @@ class ThisOrThatTestCase(unittest.TestCase):
             'url': 'www.google.com'
         }
 
-        result = self.client().post('/api/entries/add', json=new_entry)
+        result = self.client().post('/apientries/add', json=new_entry)
         data = json.loads(result.data)
 
         self.assertEqual(result.status_code, 200)
         self.assertEqual(data['success'], True)
 
     def test_400_failed_add_entry(self):
-        result = self.client().post('/api/entries/add',
+        result = self.client().post('/apientries/add',
                                     data=dict(name='test no url',
                                               category='1',
                                               url=''))
@@ -112,7 +112,7 @@ class ThisOrThatTestCase(unittest.TestCase):
 
     def test_get_update_entry(self):
         result = self.client().get(
-            '/api/entries/1/update',
+            '/apientries/1/update',
             headers={'Authorization': 'Bearer ' + user_jwt})
         data = json.loads(result.data)
 
@@ -124,7 +124,7 @@ class ThisOrThatTestCase(unittest.TestCase):
     def test_401_patch_not_auth_update_entry(self):
         patch_entry = {'id': 46, 'name': 'updated test entry', 'category': 2}
 
-        result = self.client().patch('/api/entries/46/update',
+        result = self.client().patch('/apientries/46/update',
                                      json=patch_entry)
         data = json.loads(result.data)
 
@@ -137,7 +137,7 @@ class ThisOrThatTestCase(unittest.TestCase):
 
         #User level authorization
         result = self.client().patch(
-            '/api/entries/46/update',
+            '/apientries/46/update',
             json=patch_entry,
             headers={'Authorization': 'Bearer ' + user_jwt})
         data = json.loads(result.data)
@@ -153,7 +153,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         }
         #User level auth
         result = self.client().patch(
-            '/api/entries/100000/update',
+            '/apientries/100000/update',
             json=patch_entry,
             headers={'Authorization': 'Bearer ' + user_jwt})
         data = json.loads(result.data)
@@ -165,7 +165,7 @@ class ThisOrThatTestCase(unittest.TestCase):
     def test_400_failed_update_entry(self):
         #update API endpoint ID to match your database
         result = self.client().patch(
-            '/api/entries/49/update',
+            '/apientries/49/update',
             data=dict(name='test no category', category=''),
             headers={'Authorization': 'Bearer ' + user_jwt})
         data = result.get_json()
@@ -178,7 +178,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         #update API endpoint ID to match your database
         #Admin level auth
         result = self.client().delete(
-            '/api/entries/51/delete',
+            '/apientries/51/delete',
             headers={'Authorization': 'Bearer ' + admin_jwt})
         data = json.loads(result.data)
 
@@ -189,7 +189,7 @@ class ThisOrThatTestCase(unittest.TestCase):
         #update API endpoint ID to match your database
         #user level auth, not authorized to delete
         result = self.client().delete(
-            '/api/entries/51/delete',
+            '/apientries/51/delete',
             headers={'Authorization': 'Bearer ' + user_jwt})
         data = json.loads(result.data)
 
@@ -198,7 +198,7 @@ class ThisOrThatTestCase(unittest.TestCase):
 
     def test_404_failed_delete_no_entry(self):
         result = self.client().delete(
-            '/api/entries/100000/delete',
+            '/apientries/100000/delete',
             headers={'Authorization': 'Bearer ' + admin_jwt})
         data = json.loads(result.data)
 
