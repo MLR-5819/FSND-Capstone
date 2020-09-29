@@ -32,11 +32,11 @@ Our tech stack will include:
 | admin@thisorthat.com | TestAdminP@ssw0rd |
 | user@thisorthat.com | TestUserP@ssw0rd |
 
-## Auth0 Roles/Permissions
-| Role | Permissions |
-|------|-------------|
-| User | post:entry <br> patch:entry |
-| Admin | post:entry <br> patch:entry <br> delete:entry |
+## Auth0 Roles/Permissions for authentication
+| User | Role | Permissions |
+|------|------|-------------|
+| user@thisorthat.com | User | post:entry <br> patch:entry |
+| admin@thisorthat.com | Admin | post:entry <br> patch:entry <br> delete:entry |
 
 ## Main Files: Project Structure
 
@@ -97,8 +97,8 @@ To start/run the local dev server:
 | GET | /categories/**(id)** | Render 'show_category.html' getting 1 category and displaying all entries under that category. |
 | GET | /entries/**(id)** | Render 'show_entry.html' showing 1 entry's details. |
 | GET, POST | /entries/add | GET displays the form rendered on 'add_entry.html', POST adds the new entry to the database and redirects to 'categories.html' |
-| GET, POST, PATCH | /entries/**(id)**/update | GET displays the form rendered on 'update_entry.html', POST/PATCH updates the entry to the database and redirects to 'categories.html'. Must be registered and assigned the *'User'* role. |
-| GET, DELETE | /entries/**(id)**/delete | Deletes entry and redirects to 'categories.html'. Must be registered and assigned the *'Admin'* role. |
+| GET, POST, PATCH | /entries/**(id)**/update | GET displays the form rendered on 'update_entry.html', POST/PATCH updates the entry to the database and redirects to 'categories.html'. **Must be registered and assigned the *'User'* role.** |
+| GET, DELETE | /entries/**(id)**/delete | Deletes entry and redirects to 'categories.html'. **Must be registered and assigned the *'Admin'* role.** |
 | GET | /play | Render 'play.html'. Function to be developed. |
 | GET | /logout | Redirects to Auth0 logout link.|
 
