@@ -28,16 +28,15 @@ Our tech stack will include:
 
 | **Link** | https://udacity-fsnd-tot.herokuapp.com/ |
 |----------|-----------------------------------------|
-| Users / Password | admin@thisorthat.com |
-| | TestAdminP@ssw0rd |
-| | user@thisorthat.com |
-| | TestUserP@ssw0rd |
+| **Users** | **Password** |
+| admin@thisorthat.com | TestAdminP@ssw0rd |
+| user@thisorthat.com | TestUserP@ssw0rd |
 
 ## Auth0 Roles/Permissions
 | Role | Permissions |
 |------|-------------|
-| User | post:entry patch:entry |
-| Admin | post:entry patch:entry delete:entry |
+| User | post:entry <br> patch:entry |
+| Admin | post:entry <br> patch:entry <br> delete:entry |
 
 ## Main Files: Project Structure
 
@@ -95,16 +94,17 @@ To start/run the local dev server:
 |--------|----------|-------------|
 | GET | / | Welcome page |
 | GET | /categories | Render 'categories.html' getting all categories and displaying all entries. |
-| GET | /categories/**id** | Render 'show_category.html' getting 1 category and displaying all entries under that category. |
-| GET | /entries/**id** | Render 'show_entry.html' showing 1 entry's details. |
+| GET | /categories/**(id)** | Render 'show_category.html' getting 1 category and displaying all entries under that category. |
+| GET | /entries/**(id)** | Render 'show_entry.html' showing 1 entry's details. |
 | GET, POST | /entries/add | GET displays the form rendered on 'add_entry.html', POST adds the new entry to the database and redirects to 'categories.html' |
-| GET, POST, PATCH | /entries/**id**/update | GET displays the form rendered on 'update_entry.html', POST/PATCH updates the entry to the database and redirects to 'categories.html'. Must be registered and assigned the *'User'* role. |
-| GET, DELETE | /entries/**id**/delete | Deletes entry and redirects to 'categories.html'. Must be registered and assigned the *'Admin'* role. |
-| | /play | Render 'play.html'. Function to be developed. |
-| | /logout | Redirects to Auth0 logout link.|
+| GET, POST, PATCH | /entries/**(id)**/update | GET displays the form rendered on 'update_entry.html', POST/PATCH updates the entry to the database and redirects to 'categories.html'. Must be registered and assigned the *'User'* role. |
+| GET, DELETE | /entries/**(id)**/delete | Deletes entry and redirects to 'categories.html'. Must be registered and assigned the *'Admin'* role. |
+| GET | /play | Render 'play.html'. Function to be developed. |
+| GET | /logout | Redirects to Auth0 logout link.|
 
 ## Sample Data Returned
-### GET '/categories' - render_template returned. 'api/categories' returns json data for testing.
+### GET '/categories' - render_template returned. 
+#### 'api/categories' returns json data for testing.
 ```
 curl http://127.0.0.1:8080/api/categories 
 ```
