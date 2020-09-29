@@ -25,7 +25,7 @@ def create_app(test_config=None):
         return render_template('home.html')
 
     # GET categories
-    @app.route('/api/categories', methods=['GET'])
+    @app.route('/apicategories', methods=['GET'])
     @app.route('/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.order_by(Category.type.asc()).all()
@@ -48,7 +48,7 @@ def create_app(test_config=None):
                 "votes": entry.votes
             })
 
-        if request.path == '/api/categories':
+        if request.path == '/apicategories':
             return jsonify({
                 'success': True,
                 'categories': cat_data,
@@ -60,7 +60,7 @@ def create_app(test_config=None):
                                entries=ent_data)
 
     # GET one category
-    @app.route('/api/categories/<int:id>', methods=['GET'])
+    @app.route('/apicategories/<int:id>', methods=['GET'])
     @app.route('/categories/<int:id>', methods=['GET'])
     def show_category(id):
         categories = Category.query.order_by(Category.type.asc()).all()
@@ -85,7 +85,7 @@ def create_app(test_config=None):
                 "votes": entry.votes
             })
 
-        if request.path == '/api/categories/' + str(id):
+        if request.path == '/apicategories/' + str(id):
             return jsonify({
                 'success': True,
                 'categories': cat_data,
@@ -98,7 +98,7 @@ def create_app(test_config=None):
                                entries=ent_data)
 
     # GET one entry
-    @app.route('/api/entries/<int:id>', methods=['GET'])
+    @app.route('/apientries/<int:id>', methods=['GET'])
     @app.route('/entries/<int:id>', methods=['GET'])
     def show_entry(id):
         entry = Entry.query.filter(Entry.id == id).one_or_none()
@@ -115,13 +115,13 @@ def create_app(test_config=None):
             "votes": entry.votes
         })
 
-        if request.path == '/api/entries/' + str(id):
+        if request.path == '/apientries/' + str(id):
             return jsonify({'success': True, 'entry': ent_data}), 200
 
         return render_template('show_entry.html', entry=entry)
 
     # POST request
-    @app.route('/api/entries/add', methods=['GET', 'POST'])
+    @app.route('/apientries/add', methods=['GET', 'POST'])
     @app.route('/entries/add', methods=['GET', 'POST'])
     # @requires_auth('post:entry') Not Implemented: App allows non-user to add entries
     def add_entry():
@@ -163,7 +163,7 @@ def create_app(test_config=None):
                     flash('Entry' + form.name.data +
                           ' was successfully added!')
 
-                    if request.path == '/api/entries/add':
+                    if request.path == '/apientries/add':
                         return jsonify({
                             'success': True,
                         }), 200
@@ -179,7 +179,7 @@ def create_app(test_config=None):
 
     # PATCH request
     # AUTH Users can update entry
-    @app.route('/api/entries/<int:id>/update',
+    @app.route('/apientries/<int:id>/update',
                methods=['GET', 'POST', 'PATCH'])
     @app.route('/entries/<int:id>/update', methods=['GET', 'POST', 'PATCH'])
     @requires_auth(permission='patch:entry')
@@ -198,7 +198,7 @@ def create_app(test_config=None):
             form = UpdateEntryForm()
             form.category.choices = cat_list
 
-            if request.path == '/api/entries/' + str(id) + '/update':
+            if request.path == '/apientries/' + str(id) + '/update':
                 ent_data = []
                 cat_data = []
 
@@ -252,7 +252,7 @@ def create_app(test_config=None):
             if success:
                 flash('Entry' + update.name.data +
                       ' was successfully updated!')
-            if request.path == '/api/entries/' + str(id) + '/update':
+            if request.path == '/apientries/' + str(id) + '/update':
                 return jsonify({
                     'success': True,
                 }), 200
@@ -261,7 +261,7 @@ def create_app(test_config=None):
 
     # DELETE request
     # Auth Admin can delete
-    @app.route('/api/entries/<int:id>/delete', methods=['GET', 'DELETE'])
+    @app.route('/apientries/<int:id>/delete', methods=['GET', 'DELETE'])
     @app.route('/entries/<int:id>/delete', methods=['GET', 'DELETE'])
     @requires_auth(permission='delete:entry')
     def delete_entry(payload, id):
@@ -289,7 +289,7 @@ def create_app(test_config=None):
             db.session.close()
             if success:
                 flash('Entry was successfully deleted!')
-            if request.path == '/api/entries/' + str(id) + '/delete':
+            if request.path == '/apientries/' + str(id) + '/delete':
                 return jsonify({
                     'success': True,
                 }), 200
