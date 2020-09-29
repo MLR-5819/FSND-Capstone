@@ -9,27 +9,32 @@ database_path = os.environ.get('DATABASE_URL')
 #Sets database path during local usage
 if not database_path:
     database_name = "thisorthat"
-    database_path = "postgres://{}:{}@{}/{}".format('postgres', 'password', 'localhost:5432', database_name)
+    database_path = "postgres://{}:{}@{}/{}".format('postgres', 'password',
+                                                    'localhost:5432',
+                                                    database_name)
 
 db = SQLAlchemy()
 
+
 #Setup db to bind flask app with SQLAlchemy service
-def setup_db(app, database_path = database_path):
+def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     db.create_all()
 
+
 #link to app for db conn
 def link_db():
     return db
+
 
 #Setup tables in database
 class Entry(db.Model):
     __tablename__ = 'entry'
 
-    id = Column(db.Integer, primary_key=True) 
+    id = Column(db.Integer, primary_key=True)
     name = Column(db.String)
     category = Column(db.Integer)
     entry_url = Column(db.String)
@@ -61,7 +66,7 @@ class Entry(db.Model):
             'category': self.category,
             'entry_url': self.entry_url,
             'votes': self.votes,
-            'date':self.date
+            'date': self.date
         }
 
 
@@ -75,7 +80,4 @@ class Category(db.Model):
         self.type = type
 
     def format(self):
-        return {
-            'id': self.id,
-            'type': self.type
-        }
+        return {'id': self.id, 'type': self.type}
