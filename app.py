@@ -11,6 +11,7 @@ from auth import AuthError, requires_auth
 
 SECRET_KEY=os.urandom(32)
 
+
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
