@@ -1,29 +1,3 @@
-# FSND Capstone
- Udacity Project 5
-
-TODO:
-Create DB #done
-    Add data to DB #done
-Define Models #done
-Define API endpoints/Create simple frontend #
-Define Auth0 #
-test locally (test.py) #done
-Write readme doc
-deploy to heroku #done
-test deployed app # done
-submit!
-
-https://udacity-fsnd-tot.herokuapp.com/ 
-
-user@thisorthat.com - TestUserP@ssw0rd
-#access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtoX3drdVlWNGwzT1FIX2pvaGZ6MSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tcm9zZS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY3MGQxZjBhNTExZmUwMDZiNzhmZDQwIiwiYXVkIjoidG90IiwiaWF0IjoxNjAxMjU0NTc0LCJleHAiOjE2MDEyNjE3NzQsImF6cCI6ImtZV0JvdjV0eWlZazkwRTZvc0dXaHRGNUlLeENmS3pOIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJwYXRjaDplbnRyeSIsInBvc3Q6ZW50cnkiXX0.VKeXZrDQ8rZsmDkJUhaEqR7F1ETBrvbbp_9EUvtR7q3OQJptgSrLzwzSGVeDrgSAYOPI0Esw3qiIkw-0UaVNYBwV2J1l2L2I5AMp2imfMc0E8KPJa3YxCWKV8Ji8-GOGdngyQm-Cv4LwKR4GZiCTbQocISNLuwzN8EjhtylKJkE_6hwu2eMecMxB3rMxXrPMUpyq_IpEDdxu2UKOrKfRrLWvdkgxdR5Z9T0gO55DSTWCYnTbemdQnQfCgIxBZBbhZNGBeF_5o8T21cdyR2c1yXb0bx22YoHxSr5B_wNuIvsk2UgPCCQvYjM6Q5tC7_adubTBZGHc7K8wCJUJc3A0LQ&expires_in=7200&token_type=Bearer
-
-admin@thisorthat.com - TestAdminP@ssw0rd
-#access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtoX3drdVlWNGwzT1FIX2pvaGZ6MSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tcm9zZS51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY3MGQyYWI2MzAwMjQwMDcxOTM4ZmY1IiwiYXVkIjoidG90IiwiaWF0IjoxNjAxMjU0NDk5LCJleHAiOjE2MDEyNjE2OTksImF6cCI6ImtZV0JvdjV0eWlZazkwRTZvc0dXaHRGNUlLeENmS3pOIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZW50cnkiLCJwYXRjaDplbnRyeSIsInBvc3Q6ZW50cnkiXX0.QMXDam7eiZlmaWpKyT6HZVgq9EXVR3mLmxF_xutmvikG6b8DJg_3_yHqamrLsBYsZel2PQlwG8WgXkXh3z5NkzrPyp2EvJ1dYWqK3ZSVzpKo5dv7A-16oxci30UR_1gpOCDTLUYhkCVtuxIvrWi33G7xIIMmB-0aJSujWynni_ojGO_4WPvl2XDsTG6We9yy8RP8KcOyqhUdJ6-Bgt5p-NFmuEq1epk063aPRZzgRf8tzwXu-Xu1AjOXqeKtVCRaCoDwSZ6KTUXyy41ETvoosiSWKcl8CdIRl_dgcHEAVA99gWrNdzc3YfSC7DRtVcKBdrCX7OPwp0Ya7PkPLbt3BQ&expires_in=7200&token_type=Bearer
-
-start of README.md content below
-################################
-
 # This or That API
 ## Udacity Full Stack Nanodegree Capstone Project
 
@@ -48,7 +22,22 @@ Our tech stack will include:
 * **Python3** and **Flask** - server language and server framework
 * **Flask-Migrate** - schema migrations management
 * **HTML** & **CSS** - website's frontend
-* Other requirements listed in requirements.txt **update file
+* Other requirements listed in **requirements.txt**
+
+## Live Application & Users
+
+| **Link** | https://udacity-fsnd-tot.herokuapp.com/ |
+|----------|-----------------------------------------|
+| Users / Password | admin@thisorthat.com |
+| | TestAdminP@ssw0rd |
+| | user@thisorthat.com |
+| | TestUserP@ssw0rd |
+
+## Auth0 Roles/Permissions
+| Role | Permissions |
+|------|-------------|
+| User | post:entry patch:entry |
+| Admin | post:entry patch:entry delete:entry |
 
 ## Main Files: Project Structure
 
@@ -104,5 +93,68 @@ To start/run the local dev server:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | / | Welcome page
+| GET | / | Welcome page |
+| GET | /categories | Render 'categories.html' getting all categories and displaying all entries. |
+| GET | /categories/**id** | Render 'show_category.html' getting 1 category and displaying all entries under that category. |
+| GET | /entries/**id** | Render 'show_entry.html' showing 1 entry's details. |
+| GET, POST | /entries/add | GET displays the form rendered on 'add_entry.html', POST adds the new entry to the database and redirects to 'categories.html' |
+| GET, POST, PATCH | /entries/**id**/update | GET displays the form rendered on 'update_entry.html', POST/PATCH updates the entry to the database and redirects to 'categories.html'. Must be registered and assigned the *'User'* role. |
+| GET, DELETE | /entries/**id**/delete | Deletes entry and redirects to 'categories.html'. Must be registered and assigned the *'Admin'* role. |
+| | /play | Render 'play.html'. Function to be developed. |
+| | /logout | Redirects to Auth0 logout link.|
 
+## Sample Data Returned
+### GET '/categories' - render_template returned. 'api/categories' returns json data for testing.
+```
+curl http://127.0.0.1:8080/api/categories 
+```
+```
+ "categories": [
+    {
+      "id": 6,
+      "type": "Cars"
+    },
+    {
+      "id": 2,
+      "type": "Cats"
+    },
+    {
+      "id": 3,
+      "type": "Dogs"
+    },
+    {
+      "id": 1,
+      "type": "Food"
+    },
+    {
+      "id": 5,
+      "type": "Places"
+    },
+    {
+      "id": 4,
+      "type": "Tattoos"
+    }
+  ],
+  "entries": [
+    {
+        "id": 5,
+        "image": "https://images-na.ssl-images-amazon.com/exampleURL.jpg",
+        "name": "Classic Corvette",
+        "votes": 20
+    },
+```
+### Sample error returned.
+```
+curl http://127.0.0.1:8080/api/categories/22
+```
+```
+{
+  "error": 404,
+  "message": "Resource Not Found",
+  "success": false
+}
+```
+## Unittest Testing
+```
+python test_app.py
+```
