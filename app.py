@@ -11,7 +11,6 @@ from auth import AuthError, requires_auth
 
 SECRET_KEY=os.urandom(32)
 
-
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
@@ -257,7 +256,6 @@ def create_app(test_config=None):
           }), 200
       
     return redirect(url_for('get_categories'))
-     
 
   # DELETE request
   # Auth Admin can delete
@@ -307,7 +305,7 @@ def create_app(test_config=None):
 
   # TODO Results Section for future version
 
-  # 4 @app.errorhandler
+  # 6 app errorhandlers
   
   @app.errorhandler(400)
   def bad_request(error):
